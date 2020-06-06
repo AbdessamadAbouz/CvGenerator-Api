@@ -98,7 +98,7 @@
             "description": "Arbitrary-precision arithmetic library",
             "keywords": [
                 "Arbitrary-precision",
-                "BigInteger",
+                "unsignedBigInteger",
                 "BigRational",
                 "arithmetic",
                 "bigdecimal",
