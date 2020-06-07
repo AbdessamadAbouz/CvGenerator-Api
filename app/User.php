@@ -10,6 +10,7 @@ use App\PersonalInfo;
 use App\Experience;
 use App\Formation;
 use App\Langue;
+use App\Competence;
 
 
 class User extends Authenticatable implements JWTSubject
@@ -43,6 +44,11 @@ class User extends Authenticatable implements JWTSubject
     public function langues()
     {
         return $this->hasMany(Langue::class);
+    }
+
+    public function competences()
+    {
+        return $this->hasMany(Competence::class,'competence_users','competence_id','user_id');
     }
 
     //JWT connector
