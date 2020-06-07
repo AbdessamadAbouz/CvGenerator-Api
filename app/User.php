@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\PersonalInfo;
+use App\Experience;
 
 
 class User extends Authenticatable implements JWTSubject
@@ -25,6 +26,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(PersonalInfo::class);
     }
     
+    public function experiences() 
+    {
+        return $this->hasMany(Experience::class);
+    }
     public function getJWTIdentifier()
     {
         return $this->getKey();
