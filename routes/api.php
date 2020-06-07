@@ -21,11 +21,19 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     // Personal Infos routes
     //
     Route::post('user/personal-infos/add','PersonalInfoController@store');
+    Route::get('user/personal-infos','PersonalInfoController@index');
     Route::get('user/personal-infos/{id}','PersonalInfoController@show');
     Route::put('user/personal-infos/{id}','PersonalInfoController@update');
-    Route::get('user/personal-infos','PersonalInfoController@index');
     Route::delete('user/personal-infos/{id}','PersonalInfoController@destroy');
 
+    // Experience routes
+    //
+    Route::post('user/experiences/add','ExperienceController@store');
+    Route::get('user/experiences','ExperienceController@index');
+    Route::get('user/experiences/{id}','ExperienceController@show');
+    Route::put('user/experiences/{id}','ExperienceController@update');
+    Route::delete('user/experiences/{id}','ExperienceController@destroy');
+    
     //test routes
     //
     Route::get('user', 'UserController@getAuthenticatedUser');

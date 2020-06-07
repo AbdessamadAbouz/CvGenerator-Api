@@ -83,6 +83,9 @@ class PersonalInfoController extends Controller
         if (!$personal_info)
             return $this->notFound();
 
+        if ( $user->id != $personal_info->user_id)
+            return $this->notAuthorized();
+        
         return $this->respondWithSuccess([
             'Personal_infos' => $personal_info
         ]);
@@ -98,6 +101,9 @@ class PersonalInfoController extends Controller
         $pers_info = PersonalInfo::find($id);
         if(! $pers_info)
             return $this->NotFound();
+
+        if ( $user->id != $pers_info->user_id)
+            return $this->notAuthorized();
         
         $validator = Validator::make($request->all(), [
             'nom' => 'sometimes|string|max:50',
@@ -134,6 +140,7 @@ class PersonalInfoController extends Controller
         ));
 
         if ($image = $request->file('profil_picture')) {
+            $pers_info->deleteImageFrom();
             $pers_info->saveImage($image);
         }
 
@@ -153,6 +160,9 @@ class PersonalInfoController extends Controller
         $pers_info = PersonalInfo::find($id);
         if(! $pers_info)
             return $this->NotFound();
+        
+        if ( $user->id != $pers_info->user_id)
+            return $this->notAuthorized();
         
         $pers_info->delete();
 

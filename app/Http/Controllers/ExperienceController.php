@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Experience;
+use Illuminate\Support\Facades\Validator;
 
 class ExperienceController extends Controller
 {
@@ -30,7 +31,7 @@ class ExperienceController extends Controller
             'societe' => 'required|string|max:100',
             'description' => 'required|string|max:255',
             'date_debut' => 'required|date',
-            'date_fin' => 'required|date',
+            'date_fin' => 'required|date|after:date_debut',
         ]);
 
         if ($validator->fails()) {
@@ -59,6 +60,9 @@ class ExperienceController extends Controller
 
         $experience = Experience::find($id);
 
+        if ( $user->id != $experience->user_id)
+            return $this->notAuthorized();
+        
         return $this->respondWithSuccess([
             'message' => 'Your experience',
             'experience' => $experience
@@ -75,12 +79,15 @@ class ExperienceController extends Controller
         if(! $experience)
             return $this->NotFound();
         
+        if ( $user->id != $experience->user_id)
+            return $this->notAuthorized();
+        
         $validator = Validator::make($request->all(), [
             'label' => 'sometimes|string|max:100',
             'societe' => 'sometimes|string|max:100',
             'description' => 'sometimes|string|max:255',
             'date_debut' => 'sometimes|date',
-            'date_fin' => 'sometimes|date',
+            'date_fin' => 'sometimes|date|after:date_debut',
         ]);
 
         if ($validator->fails()) {
@@ -108,10 +115,15 @@ class ExperienceController extends Controller
             return $this->notAuthorized();
 
         $experience = Experience::find($id);
-
+        if(! $experience)
+            return $this->NotFound();
+        
+        if ( $user->id != $experience->user_id)
+            return $this->notAuthorized();
+        
         $experience->delete();
 
-        return $this->respondWithSucces([
+        return $this->respondWithSuccess([
             'message' => 'Destroyed succesfully'
         ]);
     }

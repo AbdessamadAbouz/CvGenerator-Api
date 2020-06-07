@@ -28,6 +28,9 @@ class PersonalInfo extends Model
         $this->save();
     }
 
+    public function deleteImageFrom() {
+        File::delete($this->profil_picture);
+    }
     // Generate a random string to use on file names
     //
     function generateRandomString($length = 10) {
