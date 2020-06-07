@@ -164,6 +164,7 @@ class PersonalInfoController extends Controller
         if ( $user->id != $pers_info->user_id)
             return $this->notAuthorized();
         
+        $pers_info->deleteImageFrom();
         $pers_info->delete();
 
         return $this->respondWithSuccess([
