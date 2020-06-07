@@ -3,40 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use JWTAuth;
 use App\PersonalInfo;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Validator;
 
 
 class PersonalInfoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $user = auth()->user();
+
+        if (!$user)
+            return $this->notAuthorized();
+
+        return $this->respondWithSuccess([
+            'message' => 'Personal Infos for you',
+            'personal_infos' => $user->personal_infos,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $user = auth()->user();
@@ -77,20 +62,6 @@ class PersonalInfoController extends Controller
             'facebook',
             'portfolio'
         ));
-        // $pers_info = PersonalInfo::create([
-        //     'nom' => $request->input('nom'),
-        //     'prenom' => $request->input('prenom'),
-        //     'email' => $request->input('email'),
-        //     'phone' => $request->input('phone'),
-        //     'adresse' => $request->input('adresse'),
-        //     'propos' => $request->input('propos'),
-        //     'code_postal' => $request->input('code_postal'),
-        //     'linkedin' => $request->input('linkedin'),
-        //     'github' => $request->input('github'),
-        //     'facebook' => $request->input('facebook'),
-        //     'portfolio' => $request->input('portfolio'),
-        //     'user_id' => $user->id
-        // ]);
 
         if ($image = $request->file('profil_picture')) {
             $pers_info->saveImage($image);
@@ -102,12 +73,6 @@ class PersonalInfoController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $user = auth()->user();
@@ -123,37 +88,76 @@ class PersonalInfoController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $user = auth()->user();
+
+        if (!$user)
+            return $this->notAuthorized();
+
+        $pers_info = PersonalInfo::find($id);
+        if(! $pers_info)
+            return $this->NotFound();
+        
+        $validator = Validator::make($request->all(), [
+            'nom' => 'sometimes|string|max:50',
+            'prenom' => 'sometimes|string|max:50',
+            'email' => 'sometimes|email',
+            'phone' => 'sometimes|string',
+            'adresse' => 'sometimes|string|max:255',
+            'propos' => 'sometimes|string|max:255',
+            'code_postal' => 'sometimes|string|max:10',
+            'linkedin' => 'nullable|string',
+            'github' => 'nullable|string',
+            'facebook' => 'nullable|string',
+            'portfolio' => 'nullable|string',
+            'profil_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+
+        if ($validator->fails()) {
+            return $this->ValidationError($validator->errors());
+        }
+
+        $pers_info->update($request->only(
+            'nom',
+            'prenom',
+            'email',
+            'phone',
+            'adresse',
+            'propos',
+            'code_postal',
+            'linkedin',
+            'github',
+            'facebook',
+            'portfolio'
+        ));
+
+        if ($image = $request->file('profil_picture')) {
+            $pers_info->saveImage($image);
+        }
+
+        return $this->respondWithSuccess([
+            'message' => 'Personal infos saved succesfully',
+            'personal_infos' => $pers_info
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $user = auth()->user();
+
+        if (!$user)
+            return $this->notAuthorized();
+
+        $pers_info = PersonalInfo::find($id);
+        if(! $pers_info)
+            return $this->NotFound();
+        
+        $pers_info->delete();
+
+        return $this->respondWithSuccess([
+            'message' => 'Element destroyed'
+        ]);
     }
 }

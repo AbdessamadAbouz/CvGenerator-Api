@@ -18,8 +18,16 @@ Route::post('login', 'UserController@authenticate');
 Route::get('open', 'DataController@open');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
+    // Personal Infos routes
+    //
     Route::post('user/personal-infos/add','PersonalInfoController@store');
     Route::get('user/personal-infos/{id}','PersonalInfoController@show');
+    Route::put('user/personal-infos/{id}','PersonalInfoController@update');
+    Route::get('user/personal-infos','PersonalInfoController@index');
+    Route::delete('user/personal-infos/{id}','PersonalInfoController@destroy');
+
+    //test routes
+    //
     Route::get('user', 'UserController@getAuthenticatedUser');
     Route::get('closed', 'DataController@closed');
 });
