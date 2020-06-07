@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\PersonalInfo;
 use App\Experience;
+use App\Formation;
 
 
 class User extends Authenticatable implements JWTSubject
@@ -21,6 +22,8 @@ class User extends Authenticatable implements JWTSubject
 
     protected $casts = ['email_verified_at' => 'datetime'];
 
+    //Relations between tables
+    //
     public function personal_infos()
     {
         return $this->hasMany(PersonalInfo::class);
@@ -30,6 +33,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Experience::class);
     }
+
+    public function formations()
+    {
+        return $this->hasMany(Formation::class);
+    }
+
+    //JWT connector
+    //
     public function getJWTIdentifier()
     {
         return $this->getKey();
