@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\PersonalInfo;
 use App\Experience;
 use App\Formation;
+use App\Langue;
 
 
 class User extends Authenticatable implements JWTSubject
@@ -37,6 +38,11 @@ class User extends Authenticatable implements JWTSubject
     public function formations()
     {
         return $this->hasMany(Formation::class);
+    }
+
+    public function langues()
+    {
+        return $this->hasMany(Langue::class);
     }
 
     //JWT connector
