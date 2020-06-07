@@ -34,6 +34,14 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::put('user/experiences/{id}','ExperienceController@update');
     Route::delete('user/experiences/{id}','ExperienceController@destroy');
     
+    //Formation Routes 
+    //
+    Route::post('user/formations/add','FormationController@store');
+    Route::get('user/formations','FormationController@index');
+    Route::get('user/formations/{id}','FormationController@show');
+    Route::put('user/formations/{id}','FormationController@update');
+    Route::delete('user/formations/{id}','FormationController@destroy');
+
     //test routes
     //
     Route::get('user', 'UserController@getAuthenticatedUser');
