@@ -44,7 +44,11 @@ class Controller extends BaseController
 	}
 
 
-    public function notAuthorized($message = 'Not Found') {
+    public function notAuthorized($message = 'You have no rights!!') {
+        return $this->setStatusCode(403)->respondWithError($message);
+    }
+
+    public function notFound($message = 'Item Not found!!') {
         return $this->setStatusCode(403)->respondWithError($message);
     }
 

@@ -41,7 +41,7 @@ class PersonalInfoController extends Controller
     {
         $user = auth()->user();
 
-        if(! $user)
+        if (!$user)
             return $this->notAuthorized();
 
         $validator = Validator::make($request->all(), [
@@ -59,30 +59,40 @@ class PersonalInfoController extends Controller
             'profil_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        
+
         if ($validator->fails()) {
             return $this->ValidationError($validator->errors());
         }
-
-        $profileImage = '';
         
-        $pers_info = PersonalInfo::create([
-            'nom' => $request->input('nom'),
-            'prenom' => $request->input('prenom'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'adresse' => $request->input('adresse'),
-            'propos' => $request->input('propos'),
-            'code_postal' => $request->input('code_postal'),
-            'linkedin' => $request->input('linkedin'),
-            'github' => $request->input('github'),
-            'facebook' => $request->input('facebook'),
-            'portfolio' => $request->input('portfolio'),
-            'user_id' => $user->id
-            ]);
-            
-        if($image = $request->file('profil_picture'))
-        {
+        $pers_info = $user->personal_infos()->create($request->only(
+            'nom',
+            'prenom',
+            'email',
+            'phone',
+            'adresse',
+            'propos',
+            'code_postal',
+            'linkedin',
+            'github',
+            'facebook',
+            'portfolio'
+        ));
+        // $pers_info = PersonalInfo::create([
+        //     'nom' => $request->input('nom'),
+        //     'prenom' => $request->input('prenom'),
+        //     'email' => $request->input('email'),
+        //     'phone' => $request->input('phone'),
+        //     'adresse' => $request->input('adresse'),
+        //     'propos' => $request->input('propos'),
+        //     'code_postal' => $request->input('code_postal'),
+        //     'linkedin' => $request->input('linkedin'),
+        //     'github' => $request->input('github'),
+        //     'facebook' => $request->input('facebook'),
+        //     'portfolio' => $request->input('portfolio'),
+        //     'user_id' => $user->id
+        // ]);
+
+        if ($image = $request->file('profil_picture')) {
             $pers_info->saveImage($image);
         }
 
@@ -100,7 +110,17 @@ class PersonalInfoController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = auth()->user();
+        if (!$user)
+            return $this->notAuthorized();
+
+        $personal_info = PersonalInfo::find($id);
+        if (!$personal_info)
+            return $this->notFound();
+
+        return $this->respondWithSuccess([
+            'Personal_infos' => $personal_info
+        ]);
     }
 
     /**
