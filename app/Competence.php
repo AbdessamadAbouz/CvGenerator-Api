@@ -11,6 +11,13 @@ class Competence extends Model
 {
     protected $guarded = [];
 
+    protected $hidden = ['created_at','updated_at','pivot'];
+
+    public function getCompetenceTypeAttribute()
+    {
+        return CompetenceType::find($this->competence_type_id)->label;
+    }
+
     public function competence_types()
     {
         return $this->belongsTo(CompetenceType::class);

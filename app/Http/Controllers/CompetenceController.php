@@ -14,8 +14,13 @@ class CompetenceController extends Controller
         $user = auth()->user();
         if(! $user)
             return $this->notAuthorized();
-        
-        dd($user->competences);
+
+        $user->competences->append('competence_type');
+
+        return $this->respondWithSuccess([
+            'message' => 'All your competeneces are here!!',
+            'competences' => $user->competences
+        ]);
     }
 
     public function store(Request $request)
