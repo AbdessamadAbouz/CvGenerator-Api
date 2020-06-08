@@ -49,6 +49,14 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('user/langues/{id}','LangueController@show');
     Route::put('user/langues/{id}','LangueController@update');
     Route::delete('user/langues/{id}','LangueController@destroy');
+    
+    //Competence Routes 
+    //
+    Route::post('user/competences','CompetenceController@store');
+    Route::get('user/competences','CompetenceController@index');
+    Route::get('user/competences/{id}','CompetenceController@show');
+    Route::put('user/competences/{id}','CompetenceController@update');
+    Route::delete('user/competences/{id}','CompetenceController@destroy');
 
     //test routes
     //
