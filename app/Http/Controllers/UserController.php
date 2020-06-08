@@ -35,7 +35,7 @@
             ]);
 
             if($validator->fails()){
-                    return response()->json($validator->errors()->toJson(), 422);
+                    return $this->ValidationError($validator->errors());
             }
 
             $user = User::create([

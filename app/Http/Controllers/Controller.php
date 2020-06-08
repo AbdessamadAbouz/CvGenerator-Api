@@ -49,7 +49,7 @@ class Controller extends BaseController
     }
 
     public function notFound($message = 'Item Not found!!') {
-        return $this->setStatusCode(403)->respondWithError($message);
+        return $this->setStatusCode(404)->respondWithError($message);
     }
 
     public function respondWithSuccess(array $data) {

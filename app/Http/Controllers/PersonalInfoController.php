@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\PersonalInfo;
 use Illuminate\Support\Facades\Validator;
-
+use App\PersonalInfo;
 
 class PersonalInfoController extends Controller
 {
