@@ -17,7 +17,7 @@
 
             try {
                 if (! $token = JWTAuth::attempt($credentials)) {
-                    return response()->json(['error' => 'invalid_credentials'], 400);
+                    return $this->notAuthorized('Mail/Password Invalid');
                 }
             } catch (JWTException $e) {
                 return response()->json(['error' => 'could_not_create_token'], 500);
@@ -71,5 +71,15 @@
             }
 
             return response()->json(compact('user'));
+        }
+
+        public function logout()
+        {
+            JWTAuth::invalidate(JWTAuth::getToken());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'logout'
+            ], 200);
         }
     }

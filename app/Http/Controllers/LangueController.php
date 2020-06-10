@@ -17,7 +17,7 @@ class LangueController extends Controller
 
         return $this->respondWithSuccess([
             'message' => 'List of your languages!!',
-            'langue' => $user->langues
+            'langues' => $user->langues
         ]);
     }
 
@@ -115,7 +115,7 @@ class LangueController extends Controller
         $langue->delete();
 
         return $this->respondWithSuccess([
-            'Language has been deleted!!'
+            'message' => 'Language has been deleted!!'
         ]);
     }
 }

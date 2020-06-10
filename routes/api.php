@@ -62,4 +62,5 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     //
     Route::get('me', 'UserController@getAuthenticatedUser');
     Route::get('closed', 'DataController@closed');
+    Route::get('auth/logout','UserController@logout');
 });
