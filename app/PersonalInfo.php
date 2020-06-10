@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use App\Cv;
 
 class PersonalInfo extends Model
 {
@@ -14,9 +15,14 @@ class PersonalInfo extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function cvs() {
+        return $this->belongToMany(Cv::class);
+    }
+
     public function getUserAttribute() {
         return User::find($this->user_id);
     }
+
 
     //Save image to the path
     //

@@ -12,6 +12,7 @@ use App\Formation;
 use App\Langue;
 use App\Competence;
 use App\CompetenceType;
+use App\Cv;
 
 
 class User extends Authenticatable implements JWTSubject
@@ -49,6 +50,11 @@ class User extends Authenticatable implements JWTSubject
     public function competences()
     {
         return $this->belongsToMany(Competence::class,'competence_users','user_id','competence_id');
+    }
+
+    public function cvs() 
+    {
+        return $this->hasMany(Cv::class);
     }
 
     //JWT connector
