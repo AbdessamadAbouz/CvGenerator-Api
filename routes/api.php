@@ -57,6 +57,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('user/competences/{id}','CompetenceController@show');
     Route::put('user/competences/{id}','CompetenceController@update');
     Route::delete('user/competences/{id}','CompetenceController@destroy');
+    Route::get('user/competences-type','CompetenceController@get_types');
 
     //test routes
     //

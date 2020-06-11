@@ -137,4 +137,16 @@ class CompetenceController extends Controller
             'message' => 'Skill deleted succesfully!!!'
         ]);
     }
+
+    public function get_types() {
+        $user = auth()->user();
+        if(! $user)
+            return $this->notAuthorized();
+        
+        $types = CompetenceType::all();
+
+        return $this->respondWithSuccess([
+            'types' => $types
+        ]);
+    }
 }
