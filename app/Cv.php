@@ -8,6 +8,8 @@ use App\PersonalInfo;
 
 class Cv extends Model
 {
+    protected $guarded = [];
+
     public function users() 
     {
         return $this->belongsTo(User::class);

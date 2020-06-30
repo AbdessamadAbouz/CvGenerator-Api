@@ -18,6 +18,9 @@ Route::post('auth/login', 'UserController@authenticate');
 Route::get('open', 'DataController@open');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
+    // Generate Cv and Download it
+    //
+    Route::post('resume','CvController@store');
     // Personal Infos routes
     //
     Route::post('user/personal-infos','PersonalInfoController@store');
