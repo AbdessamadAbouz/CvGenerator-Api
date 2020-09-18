@@ -9,6 +9,8 @@ use App\Competence;
 use App\Experience;
 use App\Formation;
 use App\Langue;
+use App\Cv;
+use PDF;
 
 class CvController extends Controller
 {
@@ -20,7 +22,7 @@ class CvController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-        'personal_info_id' => 'required|integer',
+            'personal_info_id' => 'required|integer',
             'competence_ids' => 'required|array',
             'experience_ids' => 'required|array',
             'formation_ids' => 'required|array',
@@ -41,7 +43,6 @@ class CvController extends Controller
 		$skills_are_valid = $competence_ids->reduce(function ($truth, $skill_id) use ($i,$user) {
             $skill = Competence::find($skill_id);
             if(! $skill) {
-                dd('test');
                 return false;
             }
 
@@ -112,5 +113,33 @@ class CvController extends Controller
             'message' => 'Resume generated',
             'resume' => $cv
         ]);
+    }
+
+    public function index() {
+        $user = auth()->user();
+        if(! $user) 
+        {
+            return $this->notAuthorized();
+        }
+
+        $cvs = Cv::where('user_id',$user->id)->get();
+
+        return $this->respondWithSuccess([
+            'Message' => 'Here are your resumes',
+            'resumes' => $cvs
+        ]);
+    }
+
+    public function createPDF($id) {
+        $user = auth()->user();
+        if(! $user) 
+        {
+            return $this->notAuthorized();
+        }
+
+        $cv = Cv::find($id);
+        view()->share('resume',$cv);
+        $pdf = PDF::loadView('pdf_view', $cv);
+
     }
 }
