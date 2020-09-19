@@ -17,7 +17,7 @@ Route::post('auth/register', 'UserController@register');
 Route::post('auth/login', 'UserController@authenticate');
 Route::get('open', 'DataController@open');
 
-Route::group(['middleware' => ['jwt.verify']], function() {
+Route::group(['middleware' => ['jwt.verify','cors']], function() {
     // Generate Cv and Download it
     //
     Route::post('user/generate-resume','CvController@store');

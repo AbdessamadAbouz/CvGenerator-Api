@@ -140,6 +140,9 @@ class CvController extends Controller
         $cv = Cv::find($id);
         view()->share('resume',$cv);
         $pdf = PDF::loadView('pdf_view', $cv);
-
+        
+        // return $cv;
+        return $pdf->stream();
+        return $pdf->download('resume.pdf');
     }
 }
