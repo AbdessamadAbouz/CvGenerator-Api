@@ -14,6 +14,10 @@ use PDF;
 
 class CvController extends Controller
 {
+    public function __construct() {
+        $this->middleware('cors',['except' => ['store','index']]);
+    }
+
     public function store(Request $request) {
         $user = auth()->user();
         if(! $user) 
@@ -142,7 +146,7 @@ class CvController extends Controller
         $pdf = PDF::loadView('pdf_view', $cv);
         
         // return $cv;
-        return $pdf->stream();
+        // return $pdf->stream();
         return $pdf->download('resume.pdf');
     }
 }

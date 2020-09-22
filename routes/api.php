@@ -17,12 +17,15 @@ Route::post('auth/register', 'UserController@register');
 Route::post('auth/login', 'UserController@authenticate');
 Route::get('open', 'DataController@open');
 
-Route::group(['middleware' => ['jwt.verify','cors']], function() {
+
+
+Route::group(['middleware' => ['jwt.verify']], function() {
     // Generate Cv and Download it
     //
     Route::post('user/generate-resume','CvController@store');
     Route::get('user/resumes','CvController@index');
     Route::get('user/resumes/{id}',"CvController@createPDF");
+    
     // Personal Infos routes
     //
     Route::post('user/personal-infos','PersonalInfoController@store');
