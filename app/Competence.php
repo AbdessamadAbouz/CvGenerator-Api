@@ -12,6 +12,7 @@ class Competence extends Model
     protected $guarded = [];
 
     protected $hidden = ['created_at','updated_at','pivot','competence_users'];
+    protected $appends = ['competence_type'];
 
     public function getCompetenceTypeAttribute()
     {

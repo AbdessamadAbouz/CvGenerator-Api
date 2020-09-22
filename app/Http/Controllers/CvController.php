@@ -10,6 +10,7 @@ use App\Experience;
 use App\Formation;
 use App\Langue;
 use App\Cv;
+use App\PersonalInfo;
 use PDF;
 
 class CvController extends Controller
@@ -142,6 +143,60 @@ class CvController extends Controller
         }
 
         $cv = Cv::find($id);
+        if(!$cv) {
+            return $this->notFound();
+        }
+
+        $pers_infos = PersonalInfo::find($cv->personal_info_id);
+        if(!$pers_infos) {
+            return $this->notFound();
+        }
+
+        //Prepare skills for next use
+        $competence = ltrim($cv->competence_ids,'[');
+        $competence = rtrim($competence,']');
+        $competence = explode(',',$competence);
+
+        $skills = Competence::whereIn('id',$competence)->get();
+        if(!$skills) {
+            return $this->notFound();
+        }
+        
+        //Prepare experiences for next use
+        $experience = ltrim($cv->experience_ids,'[');
+        $experience = rtrim($experience,']');
+        $experience = explode(',',$experience);
+        
+        $experiences = Experience::whereIn('id',$experience)->get();
+        if(!$experiences) {
+            return $this->notFound();
+        }
+
+        //Prepare formations for next use
+        $formation = ltrim($cv->formation_ids,'[');
+        $formation = rtrim($formation,']');
+        $formation = explode(',',$formation);
+        
+        $formations = Formation::whereIn('id',$formation)->get();
+        if(!$formations) {
+            return $this->notFound();
+        }
+
+        //Prepare langues for next use
+        $langue = ltrim($cv->langue_ids,'[');
+        $langue = rtrim($langue,']');
+        $langue = explode(',',$langue);
+        
+        $langues = Langue::whereIn('id',$langue)->get();
+        if(!$langues) {
+            return $this->notFound();
+        }
+
+        view()->share('langues',$langues);
+        view()->share('formations',$formations);
+        view()->share('experiences',$experiences);
+        view()->share('skills',$skills);
+        view()->share('personal_infos',$pers_infos);
         view()->share('resume',$cv);
         $pdf = PDF::loadView('pdf_view', $cv);
         
