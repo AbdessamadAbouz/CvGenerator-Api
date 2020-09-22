@@ -25,7 +25,7 @@
           <h3>Postal code : {{$personal_infos->code_postal}}</h3>
           <h4>Languages : </h4>
           @foreach($langues as $langue)
-            <p>{{$langue->label}}</p>
+            <p><strong>{{$langue->label}}</strong> : {{$langue->level}}</p>
           @endforeach
 				</div>
 
